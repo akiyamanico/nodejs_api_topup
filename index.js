@@ -1,6 +1,6 @@
 const jwt = require("jsonwebtoken");
 const express = require("express");
-const mysql = require("mysql");
+const mysql = require("mysql2");
 const app = express();
 const multer = require("multer");
 const path = require('path');
@@ -31,10 +31,12 @@ const fileFilter = (req, file, cb) => {
 const upload = multer({ storage: storage, fileFilter: fileFilter });
 
 const db = mysql.createConnection({
-  host: "localhost",
+  host: "roundhouse.proxy.rlwy.net",
+  port: "58308",
   user: "root",
-  password: "",
-  database: "nutech_test",
+  password: "4BddDDH15fAad2egH13BecH6FD31gEg3",
+  database: "railway",
+  insecureAuth: true,
 });
 
 const isEmailValid = (email) => {
@@ -81,6 +83,7 @@ app.post("/registration", validateEmail, validatePassword, (req, res) => {
 
 app.post("/login", (req, res) => {
   const { email, password } = req.body;
+
   db.query(
     `SELECT * FROM users WHERE email = '${email}' AND password = '${password}'`,
     (err, result) => {
@@ -91,14 +94,13 @@ app.post("/login", (req, res) => {
           data: "null",
         });
       }
-      if (result.length == 0) {
+     else if (result.email == 0) {
         res.status(401).json({
           status: "102",
           message: "Username atau password salah!",
           data: "null",
         });
       } else {
-        const user = result[0];
         const token = jwt.sign({ id: user.id }, "secret", { expiresIn: "12h" });
         res.cookie("token", token, {
           maxAge: 43200000,
@@ -479,7 +481,6 @@ app.post("/transaction", (req, res) => {
                 )}','${created_on}');`,
                 (err, result) => {
                   if (err) {
-                    console.log(err);
                     return res.status(401).json({
                       status: "103",
                       message: "Token tidak tidak valid atau kadaluwarsa",
