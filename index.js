@@ -6,7 +6,7 @@ const multer = require("multer");
 const path = require('path');
 app.use(express.json());
 app.listen(3000,"0.0.0.0", () => {
-  console.log("Server running on port 8080");
+  console.log("Server running on port 3000");
 });
 
 const storage = multer.diskStorage({
