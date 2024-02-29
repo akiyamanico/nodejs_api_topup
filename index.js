@@ -5,7 +5,7 @@ const app = express();
 const multer = require("multer");
 const path = require('path');
 app.use(express.json());
-app.listen(8080, () => {
+app.listen(3000, "0,0,0,0", () => {
   console.log("Server running on port 8080");
 });
 
