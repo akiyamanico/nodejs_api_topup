@@ -291,7 +291,6 @@ app.post("/topup", (req, res) => {
               )}','${created_on}');`,
               (err, result) => {
                 if (err) {
-                  console.log(err);
                   return res.status(401).json({
                     status: "103",
                     message: "Token tidak tidak valid atau kadaluwarsa",
