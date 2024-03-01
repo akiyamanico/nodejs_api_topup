@@ -101,7 +101,9 @@ app.post("/login", (req, res) => {
           data: "null",
         });
       } else {
-        const token = jwt.sign({ id: user.id }, "secret", { expiresIn: "12h" });
+        const token = jwt.sign({ 
+          id: result[0].id,
+        }, "secret", { expiresIn: "12h" });
         res.cookie("token", token, {
           maxAge: 43200000,
           sameSite: "strict",
