@@ -394,6 +394,29 @@ app.get("/services", (req, res) => {
   });
 });
 
+app.get("/banner", (req, res) => {
+  const authHead = req.headers.authorization;
+  if (!authHead || !authHead.startsWith("Bearer ")) {
+    return res.status(401).json({
+      status: "108",
+      message: "Token tidak valid atau kadarluarsa!",
+      data: null,
+    });
+  }
+  const token = authHead.substring(7);
+  jwt.verify(token, "secret", (err, decoded) => {
+    db.query("SELECT * FROM banner", (err, result) => {
+      if (err) {
+        res
+          .status(401)
+          .json({ status: "103", message: "Bad Request!", data: "null" });
+      } else {
+        res.status(200).json({ status: "0", message: "Sukses", data: result });
+      }
+    });
+  });
+});
+
 app.post("/transaction", (req, res) => {
   const authHead = req.headers.authorization;
 
